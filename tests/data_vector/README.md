@@ -35,6 +35,7 @@ what it measured.
     6. [The photo-z convention checks](#photoz_conventions)
     7. [The non-Limber checks](#nonlimber_checks)
     8. [The sector-ladder cache check](#cache_ladder)
+    9. [The non-Limber early-exit tolerance checks](#nonlimber_tolerance)
 3. [Appendix](#appendix)
     1. [FAQ: What does this project's snapshot hold?](#frozen_copy)
     2. [FAQ: How can maintainers refresh the snapshot?](#refreeze)
@@ -370,6 +371,62 @@ In this project the ladder takes three cosmology-only steps, then
 IA-only, source-photo-z and shear-calibration steps - the lenses are
 the source sample, so there is no separate lens-photo-z rung - and
 both intrinsic-alignment models run.
+
+### The non-Limber early-exit tolerance checks (`test_nonlimber_tolerance.py`) <a name="nonlimber_tolerance"></a>
+
+The non-Limber $C_\ell$ of $w(\theta)$ (and of $\gamma_t$ where
+`adopt_limber_gs: 0`) are computed in blocks of 16 multipoles, and a
+lens bin (clustering) or lens-source pair (lensing) whose $C_\ell$
+agrees with the Limber $C_\ell$ within a tolerance at the end of a
+block takes the Limber values from there: the early exit. The switch
+multipole is an integer that moves with the parameters, so a
+finite-difference derivative whose stencil straddles a switch sees a
+step in the model, which a Fisher matrix reads as information. The
+likelihood keys `nonlimber_tolerance_gg: 0.002` and
+`nonlimber_tolerance_gs: 0.01` set the tolerances; `0` removes the
+exit, the setting Fisher derivatives use, and `accuracyboost` $> 1$
+divides the tolerances in use by $1 + 2\,(\mathrm{boost} - 1)$. The
+Fourier data vectors (`C_gg_tomo_ells`, `C_gs_tomo_ells`) never take
+the exit.
+
+`test_nonlimber_tolerance.py` builds the `example2` (3x2pt, NLA,
+Fourier) model once and runs the shared checks of
+`nonlimber_tolerance_suite` (`cosmolike_core/cocoa_testing_suites.py`):
+the frozen $\chi^2$, the documented defaults and a bit-for-bit tolerance
+round trip (tests 1-2); that tolerance 0 changes nothing, because this
+data vector is Fourier (test 3; test 4 skips); the stencil noise of the
+$w_0$, $w_a$ and `roman_B1_8` derivative columns, the FKEM hand-off at
+the caps `lmax_nonlimber` = 150, 200 and 300 (test 5: a step at the
+hand-off would raise the noise at the lower cap, where the FKEM-Limber
+difference is largest); the low-rank (SVD) engine next to FKEM at caps
+150 and 300 (test 6); that a negative or nonfinite tolerance is refused
+(test 7); the accuracy-boost scaling of the tolerances in use (test 8);
+and that the production state returns bit for bit (test 9). The noise is
+$\sigma$ of `get_stencil_noise` (`cosmolike_notebook_utils/fisher.py`):
+the whitened fourth difference of five evaluations spaced $h = 0.025$
+apart, in $\sqrt{\chi^2}$ units, the jitter one evaluation adds to a
+derivative column.
+
+Measured on 2026-11-18 (OMP 4), $\sigma$ in $\sqrt{\chi^2}$ units:
+
+| stencil noise $\sigma$ | $w_0$ | $w_a$ | `roman_B1_8` |
+|---|---|---|---|
+| cap 150 (no early exit) | 3.88e-3 | 5.00e-4 | 3e-13 |
+| cap 200 | 4.09e-3 | 5.03e-4 | - |
+| cap 300 | 4.06e-3 | 5.00e-4 | - |
+
+The frozen configuration runs at `accuracyboost: 2`. The $w_0$ noise
+floor of about 4e-3 is the same at every cap and in the SVD engine,
+so it does not come from the non-Limber path; the bound at cap 150 is
+5e-3, and test 5 allows cap 150 at most 1.1 times cap 300. The
+fiducial vector moves by 7.3e-2 between the caps 150 and 300, and the
+largest $|C_\ell^{\rm FKEM}/C_\ell^{\rm Limber} - 1|$ over the
+lens bins is 4.1e-3 / 2.6e-3 / 7.0e-4 at $\ell$ = 149 / 199 / 299.
+The SVD/FKEM noise ratio is at most 1.004 (margin 0.1).
+
+Run it alone with
+
+    python -m pytest ./projects/roman_fourier/tests/data_vector/test_nonlimber_tolerance.py -s
 
 ## Appendix <a name="appendix"></a>
 
