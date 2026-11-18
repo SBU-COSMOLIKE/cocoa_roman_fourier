@@ -23,11 +23,11 @@ the w0, wa and roman_B1_8 columns.
 Measured on 2026-11-18 (OMP 4), then bounded:
   - test 3: the vector does not change (no early exit in Fourier
     space);
-  - test 5: FKEM caps 150/200/300 give w0 3.88e-3/4.09e-3/4.06e-3 and
-    wa 5.00e-4/5.03e-4/5.00e-4; margin 0.1. The w0 floor of about
+  - test 5: FKEM caps 150/200 give w0 3.88e-3/4.09e-3 and
+    wa 5.00e-4/5.03e-4; margin 0.1. The w0 floor of about
     4e-3 is the same at every cap and in the SVD engine, so it does not
     come from the non-Limber path; bound 5e-3;
-  - test 6: SVD/FKEM ratio at most 1.004; margin 0.1.
+  - test 6: SVD/FKEM ratio at most 1.004 (w0, cap 150); margin 0.1.
 
 To run (from the Cocoa/ folder, cocoa environment active,
 start_cocoa.sh sourced):
@@ -55,6 +55,7 @@ import cocoa_test_utils as u
 TestNonLimberTolerance = u.nonlimber_tolerance_suite(
     u, name="TestNonLimberTolerance", example="example2",
     bias_parameter="roman_B1_8",
+    expected_defaults=(0.002, 0.01),
     change_bound=None,
     noise_bound=0.005,
     handoff_margin=0.1,

@@ -373,6 +373,10 @@ class _cosmolike_prototype_base(DataSetLikelihood):
       # is_linear=False keeps the nonlinear P(k) where the model uses it
       # (True would force the linear spectrum everywhere).
       ci.init_cosmo_runmode(is_linear=False)
+      # the FKEM non-Limber cap (limits.LMAX_NOLIMBER): C_gg and C_gs
+      # are non-Limber below it and Limber above; set at every
+      # initialize so no previous likelihood's cap survives
+      ci.init_lmax_nonlimber(lmax=int(getattr(self, "lmax_nonlimber", 150)))
 
       # external_nz_modeling: the n(z) arrays are read once here and kept in
       # self.lens_nz and self.source_nz, and every evaluation sends a copy
