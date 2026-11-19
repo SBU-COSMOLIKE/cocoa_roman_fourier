@@ -87,6 +87,7 @@ from getdist import IniFile
 # interface/ directory is part of the Cocoa PYTHONPATH).
 sys.path.insert(0, os.environ["ROOTDIR"] + "/external_modules/code/cosmolike_core")
 import cosmolike_notebook_utils as cnu
+from cosmolike_notebook_utils.fisher import nonlimber_derivative_mode
 import cosmolike_roman_fourier_interface as ci
 
 # OpenMP team size of the compiled loops, read once at import from
@@ -175,6 +176,11 @@ ZEROS8 = np.zeros(8)
 # (likelihood/cosmic_shear.yaml and combo_3x2pt.yaml defaults, with the
 # overrides of EXAMPLE_EVALUATE1.yaml), and the camb block of that yaml.
 _CONFIG = {
+    # Base early-exit tolerances; Fisher reads temporarily use zero.
+    "nonlimber_tolerance_gg": 0.002,
+    "nonlimber_tolerance_gs": 0.01,
+    # FKEM multipole cap, separate from the low-rank engine cap.
+    "lmax_nonlimber": 200,
     # Upper redshift, independent of sampling; matches this project YAML.
     "nonlimber_zmax": 5.0,
     # external_modules/data/roman_fourier is a link to this project's data/
@@ -199,8 +205,8 @@ _CONFIG = {
     # C-FAST-PT convolution grid / output grid; 1.0 = equal
     "internal_accuracyboost": 1.0,
     # the comoving-distance grid of the non-Limber FFTLog integrals
-    "nonlimber_accuracyboost": 1.0,
-    # 0 = exact (non-Limber) projection below l = 150, 1 = Limber
+    "nonlimber_accuracyboost": 4.0,
+    # 0 = non-Limber below lmax_nonlimber; 1 = Limber everywhere
     "adopt_limber_gs": 0,
     "adopt_limber_gg": 0,
     # non-Limber gg engine: 0 = FKEM, 1 = the low-rank engine
@@ -332,6 +338,10 @@ def init_cosmolike(CLprobe=None, with_data=False):
 
     ci.initial_setup()
     ci.init_nonlimber_zmax(zmax=float(_CONFIG["nonlimber_zmax"]))
+    ci.init_nonlimber_tolerance(
+        gg_tol=float(_CONFIG["nonlimber_tolerance_gg"]),
+        gs_tol=float(_CONFIG["nonlimber_tolerance_gs"]))
+    ci.init_lmax_nonlimber(lmax=int(_CONFIG["lmax_nonlimber"]))
     if CLprobe is not None:
         ci.init_probes(possible_probes=CLprobe)
     ci.init_binning(int(ini.int("n_cl")),
@@ -677,8 +687,8 @@ def C_gg_tomo(ell=None, limber=0, omegam=omegam, omegab=omegab, H0=H0,
     Clustering state only. limber = 1 evaluates the Limber
     approximation at every multipole (ci.C_gg_tomo_limber); anything
     else evaluates ci.C_gg_tomo, the computation of the data vector
-    (non-Limber below l = 150 with adopt_limber_gg = 0), so the two can
-    be compared on the same state.
+    (non-Limber below the configured multipole cap when adopt_limber_gg
+    is zero), so the two can be compared on the same state.
 
     Arguments:
       ell = 1D array of multipoles, or None for the band centers;
@@ -816,8 +826,8 @@ def gg_scale_cuts_tomo(kmax, alpha=0.05, omegam=omegam, omegab=omegab,
     which splits every C_gg band power into its IR and UV parts at each
     k_max and keeps a band while |C_UV|/(|C_UV| + |C_IR|) < alpha. The
     step multiplies P(k) inside every gg engine of the data vector, the
-    non-Limber projection below l = 150 included, so no Limber relation
-    between l and k enters the cut.
+    non-Limber projection below the configured cap included, so no Limber
+    relation between l and k enters the cut.
 
     Arguments:
       kmax  = 1D array of cuts in h/Mpc at z = 0, strictly ascending;
@@ -1087,7 +1097,13 @@ def get_dv(param=None, AccuracyBoost=1.0):
                CLIntegrationAccuracy=0, non_linear_emul=None,
                M=M, shear_photoz_bias=shear_photoz_bias,
                A1=A1, A2=A2_FID, BTA=BTA_FID)
-    return np.array(ci.compute_data_vector_masked(), dtype=np.float64)
+    # A stencil must not change its stopping multipole between points.
+    # Restore configured bases, not the accuracy-scaled getter values.
+    with nonlimber_derivative_mode(
+            interface=ci,
+            production_gg=_CONFIG["nonlimber_tolerance_gg"],
+            production_gs=_CONFIG["nonlimber_tolerance_gs"]):
+        return np.array(ci.compute_data_vector_masked(), dtype=np.float64)
 
 
 def get_ddv(index=0, h=0.02, CV=None, AccuracyBoost=1.0):

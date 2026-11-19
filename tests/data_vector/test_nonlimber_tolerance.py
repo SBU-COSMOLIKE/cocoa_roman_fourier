@@ -39,7 +39,7 @@ import os
 
 # OpenMP reads OMP_NUM_THREADS when the compiled libraries load, so
 # this must run before any cobaya/cosmolike import in the process.
-os.environ["OMP_NUM_THREADS"] = "4"
+os.environ["OMP_NUM_THREADS"] = os.environ.get("COCOA_TEST_OMP_THREADS", "4")
 
 import sys
 import unittest
@@ -56,6 +56,7 @@ TestNonLimberTolerance = u.nonlimber_tolerance_suite(
     u, name="TestNonLimberTolerance", example="example2",
     bias_parameter="roman_B1_8",
     expected_defaults=(0.002, 0.01),
+    expected_lmax_nonlimber=200,
     change_bound=None,
     noise_bound=0.005,
     handoff_margin=0.1,

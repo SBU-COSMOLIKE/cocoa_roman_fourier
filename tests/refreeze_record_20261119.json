@@ -1,0 +1,1322 @@
+{
+  "date": "2026-11-19",
+  "scope": "Update numerical references at the chosen project endpoint; also record cumulative drift since their previous generation.",
+  "previous_reference_project_commit": "ae8f8fdff1b249686a0bce46213118e7297f6a10",
+  "previous_reference_commit_description": "Refresh frozen references for cb halos and the growth convention\n\nRegenerate with the documented reference generator after retiring the halo-field option and adopting evolving cb halo statistics. Model-vector changes also include the previously committed Phase 1 sub-horizon growth convention; they are not attributed solely to the variance implementation. Keep these intentional reference updates separate from code changes. Full project suite passed against these references.",
+  "project_commit_before_refreeze": "5e783b88053f489f8764e10c69a940d9f29e24be",
+  "endpoint_feature_core_commit": "f8a80548d3a0e26caa861cb6dec51022d8be03fb",
+  "installed_binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+  "source_identity_note": "The feature commit identifies the endpoint implementation. The binary hash identifies the exact executable used in these tests; later unrelated source commits are not a claim of a newer compiled binary.",
+  "nonlimber_zmax": 5.0,
+  "omp_threads": 6,
+  "blas_threads": 1,
+  "configuration_changes": [
+    {
+      "example": "example1",
+      "changes": [
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "lmax_nonlimber"
+          ],
+          null,
+          200
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "nonlimber_accuracyboost"
+          ],
+          1.0,
+          4.0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "nonlimber_tolerance_gg"
+          ],
+          null,
+          0.002
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "nonlimber_tolerance_gs"
+          ],
+          null,
+          0.01
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "nonlimber_zmax"
+          ],
+          null,
+          5.0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "photoz_histogram_akima"
+          ],
+          null,
+          0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.cosmic_shear",
+            "photoz_histogram_akima_factor"
+          ],
+          null,
+          3
+        ]
+      ],
+      "errors": [],
+      "live_parameter_changes_not_adopted": [
+        [
+          [
+            "omegam",
+            "prior",
+            "max"
+          ],
+          0.9,
+          0.5
+        ],
+        [
+          [
+            "omegam",
+            "prior",
+            "min"
+          ],
+          0.1,
+          0.2
+        ],
+        [
+          [
+            "w0pwa",
+            "prior",
+            "min"
+          ],
+          -5,
+          -3
+        ]
+      ],
+      "live_prior_changes_not_adopted": [],
+      "live_fixed_params_changes_not_adopted": []
+    },
+    {
+      "example": "example2",
+      "changes": [
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "lmax_nonlimber"
+          ],
+          null,
+          200
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_accuracyboost"
+          ],
+          1.0,
+          4.0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_lowrank_gg"
+          ],
+          null,
+          0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_lowrank_lmax"
+          ],
+          null,
+          150
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_lowrank_rank"
+          ],
+          null,
+          5
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_tolerance_gg"
+          ],
+          null,
+          0.002
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_tolerance_gs"
+          ],
+          null,
+          0.01
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "nonlimber_zmax"
+          ],
+          null,
+          5.0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "photoz_histogram_akima"
+          ],
+          null,
+          0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_3x2pt",
+            "photoz_histogram_akima_factor"
+          ],
+          null,
+          3
+        ]
+      ],
+      "errors": [],
+      "live_parameter_changes_not_adopted": [
+        [
+          [
+            "omegam",
+            "prior",
+            "max"
+          ],
+          0.9,
+          0.5
+        ],
+        [
+          [
+            "omegam",
+            "prior",
+            "min"
+          ],
+          0.1,
+          0.2
+        ],
+        [
+          [
+            "w0pwa",
+            "prior",
+            "min"
+          ],
+          -5,
+          -3
+        ]
+      ],
+      "live_prior_changes_not_adopted": [
+        [
+          [],
+          null,
+          {
+            "amplitude_cut": "lambda As_1e9, roman_B1_1, roman_B1_2, roman_B1_3, roman_B1_4, roman_B1_5, roman_B1_6, roman_B1_7, roman_B1_8: 0.0 if (As_1e9/2.1)*max((roman_B1_1/1.4)**2, (roman_B1_2/1.5)**2, (roman_B1_3/1.6)**2, (roman_B1_4/1.7)**2, (roman_B1_5/1.8)**2, (roman_B1_6/1.9)**2, (roman_B1_7/2.0)**2, (roman_B1_8/2.1)**2) <= 8 else -np.inf"
+          }
+        ]
+      ],
+      "live_fixed_params_changes_not_adopted": []
+    },
+    {
+      "example": "example2_2x2pt",
+      "changes": [
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "lmax_nonlimber"
+          ],
+          null,
+          200
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_accuracyboost"
+          ],
+          1.0,
+          4.0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_lowrank_gg"
+          ],
+          null,
+          0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_lowrank_lmax"
+          ],
+          null,
+          150
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_lowrank_rank"
+          ],
+          null,
+          5
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_tolerance_gg"
+          ],
+          null,
+          0.002
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_tolerance_gs"
+          ],
+          null,
+          0.01
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "nonlimber_zmax"
+          ],
+          null,
+          5.0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "photoz_histogram_akima"
+          ],
+          null,
+          0
+        ],
+        [
+          [
+            "likelihood",
+            "roman_fourier.combo_2x2pt",
+            "photoz_histogram_akima_factor"
+          ],
+          null,
+          3
+        ]
+      ],
+      "errors": [],
+      "live_parameter_changes_not_adopted": [
+        [
+          [
+            "omegam",
+            "prior",
+            "max"
+          ],
+          0.9,
+          0.5
+        ],
+        [
+          [
+            "omegam",
+            "prior",
+            "min"
+          ],
+          0.1,
+          0.2
+        ],
+        [
+          [
+            "w0pwa",
+            "prior",
+            "min"
+          ],
+          -5,
+          -3
+        ]
+      ],
+      "live_prior_changes_not_adopted": [
+        [
+          [],
+          null,
+          {
+            "amplitude_cut": "lambda As_1e9, roman_B1_1, roman_B1_2, roman_B1_3, roman_B1_4, roman_B1_5, roman_B1_6, roman_B1_7, roman_B1_8: 0.0 if (As_1e9/2.1)*max((roman_B1_1/1.4)**2, (roman_B1_2/1.5)**2, (roman_B1_3/1.6)**2, (roman_B1_4/1.7)**2, (roman_B1_5/1.8)**2, (roman_B1_6/1.9)**2, (roman_B1_7/2.0)**2, (roman_B1_8/2.1)**2) <= 8 else -np.inf"
+          }
+        ]
+      ],
+      "live_fixed_params_changes_not_adopted": []
+    }
+  ],
+  "endpoint_only_comparisons": [
+    {
+      "project": "roman_fourier",
+      "example": "example1",
+      "tatt": false,
+      "all_limber": false,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 0
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.0,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    },
+    {
+      "project": "roman_fourier",
+      "example": "example1",
+      "tatt": true,
+      "all_limber": false,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 0
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.0,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    },
+    {
+      "project": "roman_fourier",
+      "example": "example2_2x2pt",
+      "tatt": false,
+      "all_limber": false,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 330
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 48
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.001127557757288003,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    },
+    {
+      "project": "roman_fourier",
+      "example": "example2_2x2pt",
+      "tatt": true,
+      "all_limber": false,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 330
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 48
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.0011275577572879816,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    },
+    {
+      "project": "roman_fourier",
+      "example": "example2",
+      "tatt": false,
+      "all_limber": false,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 330
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 48
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.0011282403045923335,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    },
+    {
+      "project": "roman_fourier",
+      "example": "example2",
+      "tatt": false,
+      "all_limber": true,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 0
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.0,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    },
+    {
+      "project": "roman_fourier",
+      "example": "example2",
+      "tatt": true,
+      "all_limber": false,
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed": 0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed": 330
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed": 48
+        }
+      ],
+      "endpoint": 5.0,
+      "difference_chi2": 0.0011282403045922995,
+      "binary_sha256": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "round_trip_exact": true
+    }
+  ],
+  "cumulative_serialized_vector_comparison": [
+    {
+      "file": "baryon_baccoemu.modelvector",
+      "before_sha256": "9779f8003f931821104bc1b91acdb005b7da7dde237624e265d6321f4fbf0bc4",
+      "after_sha256": "6cebe7199dde7a433fdfdb71aff828b5c851d0c13741374a61ec841d818e3482",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 5.4000000000670037e-14
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "baryon_bcemu.modelvector",
+      "before_sha256": "d8831ff87c5cc4ad8b832c30a65f3654f84078897dcd1e09433525e87466a0c2",
+      "after_sha256": "b9965c0b7d46bf076fd5cafd141c43d494cc41fc7627fe6435dcd3dacec56c3e",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.4460000000066074e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "baryon_bcemu2025.modelvector",
+      "before_sha256": "b028a25fded0b27a71900ad8c02b8787898e3ef99890eaae9e61bdbb5240ab03",
+      "after_sha256": "c3d318d607ff8fd5bbc29c016cb577204184fdd4077f08ba1505e828f8144a4b",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.459000000027295e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "baryon_flamingo.modelvector",
+      "before_sha256": "49f44bf0762eb878b8710a48c9d604e1ec438b2cd25404b753c32f9b74f49405",
+      "after_sha256": "212fbb9aa711e5d5648addb54f9489f02b2ea9b9d7de3b54954d8028d668ef22",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.470999999998033e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "baryon_spk_akino.modelvector",
+      "before_sha256": "6a3e6bbbf3402ff59e290eaa14518a2f84c2952f84d207bd789dda8b327213c7",
+      "after_sha256": "4f8c7f1f83becddbe12b2aba67985e603388aac6a591477b0dcfe1866e11364a",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.4540000000091576e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "baryon_spk_double_power_law.modelvector",
+      "before_sha256": "b8eb0aef160394aa9c103d9e47549d17824ee104ad4fe8c30a24d3bcf226a4c6",
+      "after_sha256": "078248392a917558232f790376556dbd7243accb404ef8f710d4afe5e40f1939",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.4539999999760704e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "baryon_spk_power_law.modelvector",
+      "before_sha256": "09948770190f47a8874bd1f5c1a9876cbb9dbf9d89e0ffc400eadbe133fd0a59",
+      "after_sha256": "d9a5f30431401445fe42f7e32eba90786681f1a26b80f353ca827bef4761257b",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        540
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        540
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.436999999987195e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "roman_example.datavector",
+      "before_sha256": "a6c5bb18b139c1b7a2b8e46ef47110b134662d94ae12ed2b9d35fc884de25b6b",
+      "after_sha256": "a6c5bb18b139c1b7a2b8e46ef47110b134662d94ae12ed2b9d35fc884de25b6b",
+      "file_bytes_identical": true,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        0
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        0
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        0
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 0,
+          "changed_rows_any_bit_column": 0,
+          "max_absolute_change": 0.0
+        }
+      ],
+      "status": "classified"
+    },
+    {
+      "file": "tatt_roman_fourier.modelvector",
+      "before_sha256": "680c32fe13883b1157698e569212a4b88374c0da386948dc69fc9fd78e33657c",
+      "after_sha256": "5d0216bb2f0040b0bad266f08f8f6b831ba2d5e81d86e7e9933edb6964c0a1ee",
+      "file_bytes_identical": false,
+      "old_shape": [
+        1485,
+        2
+      ],
+      "new_shape": [
+        1485,
+        2
+      ],
+      "changed_numeric_entries_per_column": [
+        0,
+        1359
+      ],
+      "changed_bit_entries_per_column": [
+        0,
+        1359
+      ],
+      "changed_serialized_tokens_per_column": [
+        0,
+        1359
+      ],
+      "blocks": [
+        {
+          "block": "ss",
+          "entries": 540,
+          "changed_rows_any_numeric_column": 540,
+          "changed_rows_any_bit_column": 540,
+          "max_absolute_change": 3.4059999999938566e-13
+        },
+        {
+          "block": "gs",
+          "entries": 825,
+          "changed_rows_any_numeric_column": 715,
+          "changed_rows_any_bit_column": 715,
+          "max_absolute_change": 7.575442000000012e-11
+        },
+        {
+          "block": "gg",
+          "entries": 120,
+          "changed_rows_any_numeric_column": 104,
+          "changed_rows_any_bit_column": 104,
+          "max_absolute_change": 5.400809999999956e-09
+        }
+      ],
+      "status": "classified"
+    }
+  ],
+  "interpretation": "The endpoint comparisons hold the binary, physical parameters and all other numerical controls fixed. Their cosmic shear and individually Limber blocks must be identical. Changes in those blocks in the separate old-reference comparison cannot be attributed to the endpoint. That comparison spans the older source history and any deliberately updated numerical settings.",
+  "attribution_limit": "This record measures each changed observable block. It does not assign cumulative historical differences to individual commits without an independent comparison.",
+  "validation": {
+    "full_run_xml_counts": {
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "accepted_failures": [],
+    "retry_evidence": null,
+    "quick_tests_log_sha256": "34eb6ae169b5b2fe4df14e75af49cb7c3f108ef828bbaef167739eb00adfaf59",
+    "reference_manifest_sha256": "683253574dfce8ac787ec9c81f127ae195c2b130a10e681026615e3cd66c610b",
+    "shared_tolerance_suite": {
+      "core_commit": "0de919bd0aa739c7ee22106afa56bcfd8fccac03",
+      "cocoa_testing_suites_sha256": "2e52cd118a5075e950e6d2bd14bec9bd59f2e2b7b5d0f626f1cb74517b0581fc",
+      "note": "Commit preserves exactly the tested source; Roman Fourier expects FKEM cap 200 and retains its separate SVD cap 150."
+    },
+    "skip_reason": "One real-space stencil test is inapplicable: Fourier vectors never take that early exit; its vector identity is checked separately."
+  },
+  "reference_chi2_before": {
+    "_meta": {
+      "chi2_tolerance": 0.2,
+      "generated_utc": "2026-10-03T16:27:46Z",
+      "omp_num_threads": "4"
+    },
+    "example1_nla": 0.0007893347308470487,
+    "example1_tatt": 3.402719991033511e-05,
+    "example2_2x2pt_nla": 0.0026062377113384963,
+    "example2_2x2pt_tatt": 5.9605241798290765e-12,
+    "example2_nla": 0.0035083481122297026,
+    "example2_tatt": 4.6161058917744684e-11
+  },
+  "reference_chi2_after": {
+    "_meta": {
+      "chi2_tolerance": 0.2,
+      "generated_utc": "2026-11-19T07:05:48Z",
+      "omp_num_threads": "6"
+    },
+    "example1_nla": 0.002373034696064282,
+    "example1_tatt": 3.421444404672863e-05,
+    "example2_2x2pt_nla": 0.11458416022800064,
+    "example2_2x2pt_tatt": 6.1916983730855275e-12,
+    "example2_nla": 0.1386928397443621,
+    "example2_tatt": 4.450547937894946e-11
+  },
+  "endpoint_band_checks": {
+    "layout": "Pair-major ordering with 15 bands per spectrum. Native compute_X_N_masked indexes start + Ncl*pair + band.",
+    "ell_centers": [
+      35.31445806308525,
+      48.93449698153415,
+      67.80749659411795,
+      93.95941264291237,
+      130.19756911313132,
+      180.4120154240586,
+      249.99311070922303,
+      346.4101615137752,
+      480.0132278028123,
+      665.1441685740268,
+      921.6761942439148,
+      1277.147191799223,
+      1769.7158282998685,
+      2452.257760926468,
+      3398.0416685322934
+    ],
+    "controls": "Same native binary and physical point, endpoint 4 versus 5, FKEM cap 200.",
+    "comparisons": [
+      {
+        "example": "example1_nla",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gg",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          }
+        ]
+      },
+      {
+        "example": "example1_tatt",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gg",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          }
+        ]
+      },
+      {
+        "example": "example2_2x2pt_nla",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 330,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          },
+          {
+            "block": "gg",
+            "changed_rows": 48,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          }
+        ]
+      },
+      {
+        "example": "example2_2x2pt_tatt",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 330,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          },
+          {
+            "block": "gg",
+            "changed_rows": 48,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          }
+        ]
+      },
+      {
+        "example": "example2_nla",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 330,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          },
+          {
+            "block": "gg",
+            "changed_rows": 48,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          }
+        ]
+      },
+      {
+        "example": "example2_nla_limber",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gg",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          }
+        ]
+      },
+      {
+        "example": "example2_tatt",
+        "fkem_cap": 200,
+        "blocks": [
+          {
+            "block": "ss",
+            "changed_rows": 0,
+            "changed_band_indices": [],
+            "largest_changed_ell": null
+          },
+          {
+            "block": "gs",
+            "changed_rows": 330,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          },
+          {
+            "block": "gg",
+            "changed_rows": 48,
+            "changed_band_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "largest_changed_ell": 180.4120154240586
+          }
+        ]
+      }
+    ]
+  },
+  "endpoint_convergence_scope": "Frozen fiducial comparisons at endpoints four and five; these are squared vector displacements, not the earlier difficult point's signed likelihood chi2 shift from 4.5 to 5. Endpoint-five convergence across the prior or in Fisher derivatives is not established by these checks."
+}

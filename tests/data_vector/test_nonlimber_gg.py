@@ -9,7 +9,7 @@ accurate when the kernels vary slowly on the radial scale chi/ell, so it
 degrades at low ell and for narrow kernels. The likelihood yaml key
 adopt_limber_gg chooses how C_ell^gg is computed:
 
-  adopt_limber_gg: 0 (the default): below ell = 150 the exact
+  adopt_limber_gg: 0 (the default): below ell = 200 the exact
       projection, computed by cosmolike's C_cl_tomo with the split of
       Fang, Krause, Eifler & MacCrann (arXiv:1911.11947): an FFTLog
       integral of the linear power spectrum plus, in Limber, what
@@ -63,7 +63,7 @@ import os
 
 # OpenMP reads OMP_NUM_THREADS when the compiled libraries load, so
 # this must run before any cobaya/cosmolike import in the process.
-os.environ["OMP_NUM_THREADS"] = "4"
+os.environ["OMP_NUM_THREADS"] = os.environ.get("COCOA_TEST_OMP_THREADS", "4")
 
 import sys
 import unittest
@@ -79,7 +79,7 @@ import cocoa_test_utils as u
 # is what makes pytest collect it here, with unchanged test ids.
 TestNonLimberGG = u.nonlimber_suite(
     u, name="TestNonLimberGG", kind="gg",
-    measured=3.445, default=0)
+    measured=3.476402519, default=0)
 
 # __name__ is "__main__" only when this file runs directly as a
 # script; pytest imports the module instead, so this block stays
