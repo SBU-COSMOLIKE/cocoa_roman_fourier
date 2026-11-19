@@ -309,6 +309,11 @@ class _cosmolike_prototype_base(DataSetLikelihood):
     # init_nonlimber_accuracy_boost in the core).
     ci.init_nonlimber_accuracy_boost(
         nonlimber_boost=float(getattr(self, "nonlimber_accuracyboost", 1.0)))
+    # The radial endpoint is independent of the node count. A missing
+    # option uses the core default, z = 4; the setter rejects smaller
+    # or non-finite values and invalidates projections after a change.
+    ci.init_nonlimber_zmax(
+        zmax=float(getattr(self, "nonlimber_zmax", 4.0)))
 
     # Galaxy-galaxy lensing (gs) and galaxy clustering (gg): 0 = exact
     # (non-Limber) projection below l = 150 and Limber above, 1 = Limber at

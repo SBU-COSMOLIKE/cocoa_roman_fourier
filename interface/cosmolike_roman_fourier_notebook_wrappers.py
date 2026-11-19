@@ -175,6 +175,8 @@ ZEROS8 = np.zeros(8)
 # (likelihood/cosmic_shear.yaml and combo_3x2pt.yaml defaults, with the
 # overrides of EXAMPLE_EVALUATE1.yaml), and the camb block of that yaml.
 _CONFIG = {
+    # Upper redshift, independent of sampling; matches this project YAML.
+    "nonlimber_zmax": 5.0,
     # external_modules/data/roman_fourier is a link to this project's data/
     "path": os.environ["ROOTDIR"] + "/external_modules/data/roman_fourier",
     "data_file": "roman_example.dataset",
@@ -233,6 +235,11 @@ def configure(**overrides):
     silently. Options read by init_cosmolike (dataset, excluded pairs,
     model choices) take effect at the next init_cosmolike call.
 
+    The endpoint can also change after initialization. Updating the compiled
+    setting here makes the next prediction rebuild the affected projections,
+    including helpers that prepare CAMB directly instead of using _set_state.
+    It must be finite and at least 4.0; invalid values leave _CONFIG intact.
+
     Arguments:
       overrides = keyword form of any _CONFIG entry, e.g.
                   configure(non_linear_emul=1).
@@ -242,17 +249,26 @@ def configure(**overrides):
 
     Raises:
       KeyError naming the unknown keyword and the valid names;
-      ValueError for a photoz_histogram_akima other than 0 or 1.
+      ValueError for a photoz_histogram_akima other than 0 or 1,
+      or a nonfinite nonlimber_zmax or one below 4.0.
     """
     for name in overrides:
         if name not in _CONFIG:
             raise KeyError(
                 f"configure() got unknown option '{name}'; valid options: "
                 + ", ".join(sorted(_CONFIG)))
+    if "nonlimber_zmax" in overrides:
+        endpoint = float(overrides["nonlimber_zmax"])
+        if not np.isfinite(endpoint) or endpoint < 4.0:
+            raise ValueError(
+                f"nonlimber_zmax = {endpoint}; choose a finite value >= 4.0")
+
     if overrides.get("photoz_histogram_akima", 0) not in (0, 1):
         raise ValueError("configure(): photoz_histogram_akima must be 0 or 1")
     for name, value in overrides.items():
         _CONFIG[name] = value
+    if "nonlimber_zmax" in overrides:
+        ci.init_nonlimber_zmax(zmax=endpoint)
 
 
 def current_config():
@@ -315,6 +331,7 @@ def init_cosmolike(CLprobe=None, with_data=False):
         allsims = None
 
     ci.initial_setup()
+    ci.init_nonlimber_zmax(zmax=float(_CONFIG["nonlimber_zmax"]))
     if CLprobe is not None:
         ci.init_probes(possible_probes=CLprobe)
     ci.init_binning(int(ini.int("n_cl")),
@@ -426,6 +443,7 @@ def _set_state(omegam, omegab, H0, ns, As_1e9, w, w0pwa,
     Raises:
       ValueError when baryon_sims is given but no HDF5 file is known.
     """
+    ci.init_nonlimber_zmax(zmax=float(_CONFIG["nonlimber_zmax"]))
     if kmax is None:
         kmax = _CONFIG["camb_kmax"]
     if k_per_logint is None:
