@@ -20,14 +20,16 @@ The stencil noise is the whitened fourth difference of five evaluations
 (cosmolike_notebook_utils.fisher.get_stencil_noise, step h = 0.025) of
 the w0, wa and roman_B1_8 columns.
 
-Measured on 2026-11-18 (OMP 4), then bounded:
-  - test 3: the vector does not change (no early exit in Fourier
-    space);
-  - test 5: FKEM caps 150/200 give w0 3.88e-3/4.09e-3 and
-    wa 5.00e-4/5.03e-4; margin 0.1. The w0 floor of about
-    4e-3 is the same at every cap and in the SVD engine, so it does not
-    come from the non-Limber path; bound 5e-3;
-  - test 6: SVD/FKEM ratio at most 1.004 (w0, cap 150); margin 0.1.
+At the stored fiducial, the hand-off check compares FKEM caps 150 and
+200 with the numerical bounds supplied below. Its one-sided fourth-
+difference bound is a regression diagnostic, not a proof that a hand-off
+contribution is absent. Smooth fourth-order curvature also contributes.
+
+The SVD comparison sets the same galaxy-shear FKEM cap in both runs:
+only the galaxy-clustering engine changes. The measured fourth differences
+must satisfy this project's unchanged relative margin and absolute floor.
+The controlled comparison and validation are recorded in
+`tests/nonlimber_matched_caps_20261119.json`.
 
 To run (from the Cocoa/ folder, cocoa environment active,
 start_cocoa.sh sourced):

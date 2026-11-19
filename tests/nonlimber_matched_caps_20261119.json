@@ -1,0 +1,275 @@
+{
+  "date": "2026-11-19",
+  "scope": "Correct a shared test comparison; no native implementation, physical parameter, frozen reference or assertion margin changes.",
+  "shared_helper_core_commit": "2bc4500a9a55c1c4dcbe26952e0cfd658846fdc5",
+  "shared_helper_sha256": "6a8e26c462f825bcb0efa6255f4db1c3082c771f6e3853aa420d4e33fbbf39b0",
+  "previous_helper_core_commit": "0de919b",
+  "previous_helper_sha256": "2e52cd118a5075e950e6d2bd14bec9bd59f2e2b7b5d0f626f1cb74517b0581fc",
+  "cause": "The legacy SVD run left galaxy-shear at the production FKEM cap while the paired FKEM run changed that cap. The corrected helper sets both caps to the requested comparison value and retains its finally-based production restoration.",
+  "controlled_evidence_project": "roman_kl",
+  "controlled_evidence": {
+    "finding": "The old low-cap comparison changed gs projection settings as well as the gg engine. Matching the gs cap removes the failure without changing any margin or native implementation.",
+    "comparisons": [
+      {
+        "cap": 150,
+        "fkem_sigma": {
+          "w0": 0.004129304802344561,
+          "wa": 0.0004137010269278194,
+          "ROMAN_KL_B1_10": 4.1599699505149496e-13
+        },
+        "matched_svd_sigma": {
+          "w0": 0.004134682950091227,
+          "wa": 0.00041407540486666116,
+          "ROMAN_KL_B1_10": 4.1643150475102603e-13
+        },
+        "unchanged_10_percent_bounds_pass": {
+          "w0": true,
+          "wa": true,
+          "ROMAN_KL_B1_10": true
+        },
+        "all_15_ss_gs_stencils_bitwise_equal": true
+      },
+      {
+        "cap": 200,
+        "fkem_sigma": {
+          "w0": 0.005185671893661989,
+          "wa": 0.00040736329951387133,
+          "ROMAN_KL_B1_10": 4.1612666596754856e-13
+        },
+        "matched_svd_sigma": {
+          "w0": 0.005151415448078848,
+          "wa": 0.00040540490502293604,
+          "ROMAN_KL_B1_10": 4.1671879771367484e-13
+        },
+        "unchanged_10_percent_bounds_pass": {
+          "w0": true,
+          "wa": true,
+          "ROMAN_KL_B1_10": true
+        },
+        "all_15_ss_gs_stencils_bitwise_equal": true
+      }
+    ],
+    "old_to_matched_svd150_changed_stencil_values": {
+      "ss": 0,
+      "gs": 675,
+      "gg": 0
+    },
+    "fresh_processes": 5,
+    "each_process_restores_production_bitwise": true,
+    "statistic_limit": "The whitened fourth difference includes smooth fourth-order curvature as well as numerical artifacts; the controlled comparison does not establish purely stochastic noise.",
+    "input_and_binary_identity_across_cases": true,
+    "artifact_sha256": {
+      "matched_svd150.npz": "01b4d6f5f82ae8ef40598cd3a4548e2de9efec45d35ab605a6e33954e2f6ea6d",
+      "legacy_svd150.npz": "9d8cbd101679343e1724ac0e6a51640baa529c0dd0b4283d5d7fde9a376abfe2",
+      "legacy_fkem150.npz": "d156e78c536cfe7d04b20f38391a513649a4461b31fe462b73d53263e157d559",
+      "legacy_fkem200.npz": "f988d7f4ce241c19c2f77e8805b01a20c5eff75996bf677fc3993c9bdc1fffe3",
+      "matched_svd200.npz": "55bb324e41e2013856532dfdb63fe846643a6a745ce6e450a03f0e31b1e7defb"
+    },
+    "case_input_records": [
+      {
+        "variant": "legacy",
+        "engine": "FKEM",
+        "cap": 150,
+        "sigma": {
+          "w0": 0.004129304802344561,
+          "wa": 0.0004137010269278194,
+          "ROMAN_KL_B1_10": 4.1599699505149496e-13
+        },
+        "production": {
+          "gg_tol": 0.002,
+          "gs_tol": 0.01,
+          "lmax_nonlimber": 200,
+          "lowrank_flag": 0,
+          "lowrank_rank": 5,
+          "lowrank_lmax": 200,
+          "accuracy_boost": 1.0,
+          "integration_accuracy": 1
+        },
+        "block_sizes": [
+          1100,
+          900,
+          200
+        ],
+        "restoration_bitwise": true,
+        "omp_threads": 6,
+        "blas_threads": 1,
+        "helper_sha256": "2e52cd118a5075e950e6d2bd14bec9bd59f2e2b7b5d0f626f1cb74517b0581fc",
+        "library_sha256": "cf7fe79ab4d2def95ac578605794ff80923d4c2e1a588062207adfc9f751a492",
+        "frozen_manifest_sha256": "f31a078da11dd9827b5077705eb74e6c458d4e8fb22ab26894e0c5a63ef0ac6a"
+      },
+      {
+        "variant": "legacy",
+        "engine": "SVD",
+        "cap": 150,
+        "sigma": {
+          "w0": 0.004545113503941975,
+          "wa": 0.00041420254763831823,
+          "ROMAN_KL_B1_10": 4.1633619824221025e-13
+        },
+        "production": {
+          "gg_tol": 0.002,
+          "gs_tol": 0.01,
+          "lmax_nonlimber": 200,
+          "lowrank_flag": 0,
+          "lowrank_rank": 5,
+          "lowrank_lmax": 200,
+          "accuracy_boost": 1.0,
+          "integration_accuracy": 1
+        },
+        "block_sizes": [
+          1100,
+          900,
+          200
+        ],
+        "restoration_bitwise": true,
+        "omp_threads": 6,
+        "blas_threads": 1,
+        "helper_sha256": "2e52cd118a5075e950e6d2bd14bec9bd59f2e2b7b5d0f626f1cb74517b0581fc",
+        "library_sha256": "cf7fe79ab4d2def95ac578605794ff80923d4c2e1a588062207adfc9f751a492",
+        "frozen_manifest_sha256": "f31a078da11dd9827b5077705eb74e6c458d4e8fb22ab26894e0c5a63ef0ac6a"
+      },
+      {
+        "variant": "matched",
+        "engine": "SVD",
+        "cap": 150,
+        "sigma": {
+          "w0": 0.004134682950091227,
+          "wa": 0.00041407540486666116,
+          "ROMAN_KL_B1_10": 4.1643150475102603e-13
+        },
+        "production": {
+          "gg_tol": 0.002,
+          "gs_tol": 0.01,
+          "lmax_nonlimber": 200,
+          "lowrank_flag": 0,
+          "lowrank_rank": 5,
+          "lowrank_lmax": 200,
+          "accuracy_boost": 1.0,
+          "integration_accuracy": 1
+        },
+        "block_sizes": [
+          1100,
+          900,
+          200
+        ],
+        "restoration_bitwise": true,
+        "omp_threads": 6,
+        "blas_threads": 1,
+        "helper_sha256": "43fdaf8b4c9db9a92088e19f6f745f6d6d00fcaa69dff4ec3038ef2742cd94a6",
+        "library_sha256": "cf7fe79ab4d2def95ac578605794ff80923d4c2e1a588062207adfc9f751a492",
+        "frozen_manifest_sha256": "f31a078da11dd9827b5077705eb74e6c458d4e8fb22ab26894e0c5a63ef0ac6a"
+      },
+      {
+        "variant": "legacy",
+        "engine": "FKEM",
+        "cap": 200,
+        "sigma": {
+          "w0": 0.005185671893661989,
+          "wa": 0.00040736329951387133,
+          "ROMAN_KL_B1_10": 4.1612666596754856e-13
+        },
+        "production": {
+          "gg_tol": 0.002,
+          "gs_tol": 0.01,
+          "lmax_nonlimber": 200,
+          "lowrank_flag": 0,
+          "lowrank_rank": 5,
+          "lowrank_lmax": 200,
+          "accuracy_boost": 1.0,
+          "integration_accuracy": 1
+        },
+        "block_sizes": [
+          1100,
+          900,
+          200
+        ],
+        "restoration_bitwise": true,
+        "omp_threads": 6,
+        "blas_threads": 1,
+        "helper_sha256": "2e52cd118a5075e950e6d2bd14bec9bd59f2e2b7b5d0f626f1cb74517b0581fc",
+        "library_sha256": "cf7fe79ab4d2def95ac578605794ff80923d4c2e1a588062207adfc9f751a492",
+        "frozen_manifest_sha256": "f31a078da11dd9827b5077705eb74e6c458d4e8fb22ab26894e0c5a63ef0ac6a"
+      },
+      {
+        "variant": "matched",
+        "engine": "SVD",
+        "cap": 200,
+        "sigma": {
+          "w0": 0.005151415448078848,
+          "wa": 0.00040540490502293604,
+          "ROMAN_KL_B1_10": 4.1671879771367484e-13
+        },
+        "production": {
+          "gg_tol": 0.002,
+          "gs_tol": 0.01,
+          "lmax_nonlimber": 200,
+          "lowrank_flag": 0,
+          "lowrank_rank": 5,
+          "lowrank_lmax": 200,
+          "accuracy_boost": 1.0,
+          "integration_accuracy": 1
+        },
+        "block_sizes": [
+          1100,
+          900,
+          200
+        ],
+        "restoration_bitwise": true,
+        "omp_threads": 6,
+        "blas_threads": 1,
+        "helper_sha256": "43fdaf8b4c9db9a92088e19f6f745f6d6d00fcaa69dff4ec3038ef2742cd94a6",
+        "library_sha256": "cf7fe79ab4d2def95ac578605794ff80923d4c2e1a588062207adfc9f751a492",
+        "frozen_manifest_sha256": "f31a078da11dd9827b5077705eb74e6c458d4e8fb22ab26894e0c5a63ef0ac6a"
+      }
+    ]
+  },
+  "this_project_validation": {
+    "passed": 2,
+    "tests": [
+      "test_6_svd_noise",
+      "test_9_production_state_restored"
+    ],
+    "elapsed_seconds": 107.1764657497406,
+    "fingerprint": {
+      "interface/cosmolike_roman_fourier_interface.so": "0108c2281a5bb528f8a108e15f1638b6f49028f66b400ba76a82e74ad05f4c5d",
+      "tests/manifest_sha256.json": "683253574dfce8ac787ec9c81f127ae195c2b130a10e681026615e3cd66c610b",
+      "tests/cocoa_test_utils.py": "4e184530814f7e158cef8209cd306615bef0f6be97c2c4bbc0918176b054c22f",
+      "likelihood/__init__.py": "27a1dcaf09ebee92f409595049320f90f1f7125c392acf9abd9a9185a7235580",
+      "likelihood/_cosmolike_prototype_base.py": "22b9d213b8d4165b44c864a75dd72bfa302592585150d6d2f8ff1f5147c3a0d4",
+      "likelihood/combo_2x2pt.py": "7700bb5acecc4937a5a979dc63ab3c2533ba00c4d5a8696c2ae42840804e7844",
+      "likelihood/combo_3x2pt.py": "8dd9bccf7d81183d63afa5de90ecd5861b2ef4a1f67f2a7495535d663ce2d704",
+      "likelihood/cosmic_shear.py": "04c459d2e8e41fd24c10625e8122b1871be04f367aaef77c0667199c2d5fc4df",
+      "likelihood/combo_2x2pt.yaml": "07f3013c1e8cd58ce0ca54f56c239df49d8bddb83a50b85760b15025d47bbee3",
+      "likelihood/combo_3x2pt.yaml": "07f3013c1e8cd58ce0ca54f56c239df49d8bddb83a50b85760b15025d47bbee3",
+      "likelihood/cosmic_shear.yaml": "e5542017f57fd6a4fa0b08f523a0f7b9815a33f8561f05eb91ec46296bc9a9fa",
+      "likelihood/params_lens.yaml": "d6acf4e7b3e38bf61b0bbc3e0fab9b9038c4fc561f20d945bd0528a4263339a1",
+      "likelihood/params_source.yaml": "496a3706b02abd123c04fec4275346b698094ffd0c93e3c7d6a7ed00d3fe42ae"
+    },
+    "helper_sha256": "6a8e26c462f825bcb0efa6255f4db1c3082c771f6e3853aa420d4e33fbbf39b0",
+    "log_sha256": "f7e5c6cdb311de82c1f1e4845163bba17f00b7f702f5429ce04beb79166feedf",
+    "xml_sha256": "fdffed5b8ebee9ed0eb2c6fb46501ab66b077a35843a89636bb8297a6eea78e2",
+    "omp_threads": 6,
+    "blas_threads": 1
+  },
+  "caller_documentation": {
+    "path": "tests/data_vector/test_nonlimber_tolerance.py",
+    "before_sha256": "5c792e5c2e3a26c4c59ae8fb26f656d135c71bd051e3ef0e1a86198c60875ba8",
+    "after_sha256": "cfa51d74384b8d66a5e540f12be06c4d1e322ffd40cb76435cdc46b3b70019d2",
+    "executable_ast_unchanged": true
+  },
+  "reproduction": {
+    "working_directory": "Cocoa checkout root with its normal build/runtime environment sourced.",
+    "environment": {
+      "OMP_NUM_THREADS": "6",
+      "OMP_THREAD_LIMIT": "6",
+      "COCOA_TEST_OMP_THREADS": "6",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "command": "python -B -m pytest projects/roman_fourier/tests/data_vector/test_nonlimber_tolerance.py -k \"test_6_svd_noise or test_9_production_state_restored\" -p no:cacheprovider",
+    "regression_reproducer": "The committed Roman KL test_6_svd_noise reproduces the original failure with helper commit 0de919b and passes with helper commit 2bc4500, holding the recorded frozen inputs and compiled library fixed. The original full-run failure is retained in the Roman KL refreeze record.",
+    "five_process_control": "Five fresh processes used immutable copies of cocoa_testing_suites.py: legacy commit 0de919b, or its single setter-placement correction (same executable change as commit 2bc4500). Engine/cap/variant, all input and helper hashes, and the production state are listed in case_input_records. The saved NPZ hashes identify all fifteen stencil vectors per case.",
+    "controlled_inputs_project_commit": "14281fd11564b446799422d86c9f8031d342fa46"
+  }
+}
