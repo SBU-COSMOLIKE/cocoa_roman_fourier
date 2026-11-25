@@ -566,8 +566,7 @@ the same 50 broad points (open symbols) and 25 focused points (filled symbols).
 The solid and dashed curves show the saved 68% and 95%
 nuisance-marginalized Fisher regions.
 
-CAMB uses `AccuracyBoost: 1.05`, `k_per_logint: 15` and `kmax: 7.5`. The saved
-Fisher diagnostic found a maximum FoM shift of 0.19%.
+CAMB uses `AccuracyBoost: 1.05`, `k_per_logint: 15` and `kmax: 7.5`.
 
 ![Roman Fourier hybrid-emulator error against CAMB](figures/emulator_precision.png)
 
@@ -578,6 +577,28 @@ Counts use the thresholds 0.2, 0.5, 1 and 4 in that order.
 | Roman Fourier | 7/16/21/27 | 8/20/21/23 | 0/0 |
 
 <!-- end hybrid-emulator figure -->
+
+### Full 3×2pt
+
+The [3×2pt benchmark](../fisher_reference/3x2pt/) uses Evaluate 2's full
+optical selection and fixed nuisance values. Its matched Fisher forecast
+uses the same retained data vector and marginalizes over the sampled
+nuisance parameters. The 50 broad cosmologies are the same as in the
+shear comparison. The 25 focused cosmologies come from the 3×2pt Fisher
+distribution.
+
+CAMB uses `AccuracyBoost: 1.1`, `k_per_logint: 15`, and `kmax: 10.0`.
+
+![Roman Fourier - 3×2pt](figures/emulator_precision_3x2pt.png)
+
+Counts use the thresholds 0.2, 0.5, 1 and 4 in that order.
+
+| Probe | Broad below threshold (50) | Focused below threshold (25) | Nonfinite broad/focused |
+| --- | --- | --- | --- |
+| 3×2pt | 2/3/3/15 | 0/0/3/22 | 0/0 |
+
+Add `--probe 3x2pt` to the standalone comparison command below.
+
 
 E5 reads the saved `benchmark.yaml` in [fisher_reference/](../fisher_reference/).
 The benchmark fixes the likelihood, data selection, sampled parameters,
@@ -604,13 +625,12 @@ OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   projects/roman_fourier/tests/compare_emulator_camb.py --mpi --advisory
 ```
 
-Saved Fisher contours show the bounded 68% and 95% regions of a centered
-CAMB forecast with nuisance parameters marginalized. The saved reference
-records the matrix, priors, fiducial, selection and numerical diagnostics.
-The accuracy run uses the available saved contour for display. Prediction
-errors remain valid when the saved contour is absent or marked unreliable. `--fisher-reference` selects a saved directory, and
-`--no-fisher` omits the display. Candidate networks can be changed using
-`EMULATOR_CODE_DIR` and `EMULATOR_DATA_DIR`.
+The shared plot uses saved 68% and 95% bounded Fisher contours with
+nuisance parameters marginalized. The reference records the matrix, priors,
+fiducial and data selection. Use `--fisher-reference` to select a saved
+reference directory or `--no-fisher` to show only the comparison points.
+Use `EMULATOR_CODE_DIR` and `EMULATOR_DATA_DIR` to select the candidate
+network installation.
 
 ```bash
 python projects/roman_fourier/tests/compare_emulator_camb.py --plot-only /path/to/run
@@ -636,7 +656,7 @@ columns remain unbounded, so the estimate measures sensitivity to the tested
 refinement.
 
 Run from activated Cocoa with two MPI ranks, four OpenMP threads per rank
-and one BLAS thread.
+and one BLAS thread. Add `--probe 3x2pt` for the full selection.
 
 ```bash
 OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
