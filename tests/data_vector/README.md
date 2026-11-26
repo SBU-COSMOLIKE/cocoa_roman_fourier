@@ -323,6 +323,9 @@ Model $`m`$ uses seed $`137+m`$, with $`m=0`$ for the first model.
 A draw that fails a joint prior cut is replaced
 using the same seed's random stream. The priors enforce
 $`w_0+w_a<-0.4`$ and $`\Omega_b h^2<0.035`$.
+The joint `amplitude_cut` also requires
+$`\max_i[A_s b_i^2/(A_s b_i^2)_{\rm fid}]\leq 8`$, with each lens bin
+normalized by its fiducial amplitude in the evaluation YAML.
 
 Compare each ordinary prediction with the saved prediction at the same
 point using the [combined refinements](#accuracy_checks). The predictions
@@ -349,10 +352,9 @@ and the largest was 1.4×10³ at seed 154.
 
 ![Roman Fourier-space NLA 3×2pt prediction distance at 50 prior draws](figures/accuracy_nmodels_example2_seed137.png)
 
-The plot relates Δχ² to the matter density and the largest relative
-$`A_s b_i^2`$ across the sampled lens-bias parameters. The denominator is
-the fiducial value for each lens bin. The dashed line marks Δχ² = 0.2,
-and the color scale saturates at Δχ² = 1.
+The plot relates Δχ² to the matter density and the clustering-amplitude
+ratio above. The dashed line marks Δχ² = 0.2, and the color scale
+saturates at Δχ² = 1.
 [Plotted values](figures/accuracy_nmodels_example2_seed137.txt)
 
 Run from the activated `Cocoa/` directory with the thread settings in
