@@ -9,7 +9,7 @@ because code or data changed by accident, and a race condition (a bug
 where evaluating several points in a row corrupts a later result
 through leftover internal state or colliding OpenMP threads).
 
-Every model build runs in its own worker subprocess. In this project
+Fiducial checks build each model in a worker subprocess. In this project
 both examples share one data set, so the isolation is preventive: it
 keeps the tests immune to the process abort that different data-set
 dimensions trigger inside cosmolike, and every project keeps one
@@ -31,12 +31,13 @@ what it measured.
     2. [The Halofit vs EE2 checks](#halofit_ee2)
     3. [The EE2 race test](#ee2_race)
     4. [Accuracy checks](#accuracy_checks)
-    5. [Baryonic feedback checks](#baryon_checks)
-    6. [The photo-z convention checks](#photoz_conventions)
-    7. [The non-Limber checks](#nonlimber_checks)
-    8. [The sector-ladder cache check](#cache_ladder)
-    9. [The non-Limber early-exit tolerance checks](#nonlimber_tolerance)
-    10. [The non-Limber radial grid](#nonlimber_grid)
+    5. [N-random-models accuracy check](#nmodels_check)
+    6. [Baryonic feedback checks](#baryon_checks)
+    7. [The photo-z convention checks](#photoz_conventions)
+    8. [The non-Limber checks](#nonlimber_checks)
+    9. [The sector-ladder cache check](#cache_ladder)
+    10. [The non-Limber early-exit tolerance checks](#nonlimber_tolerance)
+    11. [The non-Limber radial grid](#nonlimber_grid)
 3. [Hybrid-emulator accuracy test](#hybrid-emulator-accuracy-test)
 4. [FoM convergence](#fom-convergence)
 5. [Appendix](#appendix)
@@ -294,11 +295,85 @@ returned to `accuracyboost: 2` on 2026-10-01.
 > reference tests. The likelihood yaml files repeat this next to the
 > knobs.
 
-Run them on their own, or skip them (high-accuracy evaluations take
-minutes):
+Use the activated `Cocoa/` directory and setup in
+[Running the tests](#run_tests).
 
-    python -m pytest ./projects/roman_fourier/tests/data_vector/test_accuracy.py
-    python -m pytest ./projects/roman_fourier/tests --ignore ./projects/roman_fourier/tests/data_vector/test_accuracy.py
+**Step :one:** Choose which tests to run.
+
+**Accuracy checks only**
+
+```bash
+python -m pytest -s projects/roman_fourier/tests/data_vector/test_accuracy.py
+```
+
+**Other project tests**
+
+```bash
+python -m pytest -s projects/roman_fourier/tests \
+  --ignore projects/roman_fourier/tests/data_vector/test_accuracy.py
+```
+
+### N-random-models accuracy check <a name="nmodels_check"></a>
+
+[**Mechanism**](https://github.com/CosmoLike/cocoa-cosmolike-core/blob/main/README.md#dv_nmodels).
+Use NLA for Roman Fourier-space 3×2pt with the priors in
+`EXAMPLE_EVALUATE2.yaml`.
+Draw 50 points over the 36 sampled cosmological and nuisance parameters.
+Model $`m`$ uses seed $`137+m`$, with $`m=0`$ for the first model.
+A draw that fails a joint prior cut is replaced
+using the same seed's random stream. The priors enforce
+$`w_0+w_a<-0.4`$ and $`\Omega_b h^2<0.035`$.
+
+Compare each ordinary prediction with the saved prediction at the same
+point using the [combined refinements](#accuracy_checks). The predictions
+use the same 1,359 retained rows and survey covariance. The advisory
+accuracy target is Δχ² < 0.2.
+
+| Ordinary CAMB control | Value |
+| --- | ---: |
+| `AccuracyBoost` | 1.05 |
+| `k_per_logint` | 10 |
+| Requested `kmax` (Mpc⁻¹) | 10 |
+
+The Roman Fourier likelihood requests power to 20 Mpc⁻¹, so
+CAMB reaches that cutoff in the ordinary calculation.
+The pushed model requests `kmax: 50` Mpc⁻¹ in CAMB and reaches 120 Mpc⁻¹
+because CosmoLike requests power to `kmax_boltzmann × accuracyboost`.
+
+`tests/frozen/nmodels_example2.npz` stores the accepted points, the
+pushed predictions and the masked precision. Each test run evaluates
+the ordinary predictions and reads that saved file.
+
+Of the 50 predictions, 31 met the target. The median Δχ² was 8.3×10⁻²
+and the largest was 1.4×10³ at seed 154.
+
+![Roman Fourier-space NLA 3×2pt prediction distance at 50 prior draws](figures/accuracy_nmodels_example2_seed137.png)
+
+The plot relates Δχ² to the matter density and the largest relative
+$`A_s b_i^2`$ across the sampled lens-bias parameters. The denominator is
+the fiducial value for each lens bin. The dashed line marks Δχ² = 0.2,
+and the color scale saturates at Δχ² = 1.
+[Plotted values](figures/accuracy_nmodels_example2_seed137.txt)
+
+Run from the activated `Cocoa/` directory with the thread settings in
+[Running the tests](#run_tests).
+
+**Step :one:** Compare the ordinary predictions with the saved vectors.
+
+```bash
+python -m pytest -s projects/roman_fourier/tests/data_vector/test_accuracy.py -k nmodels
+```
+
+The run prints where it wrote the figure and its plotted values.
+`COCOA_ACCURACY_NMODELS_FIGURES` can set that directory.
+
+To refresh the pushed reference, use the same environment.
+
+**Step :one:** Recompute and save the 50 pushed predictions.
+
+```bash
+python projects/roman_fourier/tests/generate_frozen_reference.py --nmodels
+```
 
 ### Baryonic feedback checks (`test_accuracy_baryons.py` BF0-BF7, `test_baryons.py` BD1-BD7) <a name="baryon_checks"></a>
 

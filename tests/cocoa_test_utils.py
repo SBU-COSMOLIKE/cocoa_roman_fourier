@@ -90,10 +90,15 @@ TATT_GENERATORS = {
 
 # ---- configurations ---------------------------------------------------------
 
+# The random-model test uses this current NLA analysis and its joint prior.
+NMODELS_CURRENT_PRIOR = True
+NMODELS_EXAMPLES = (("example2", "Roman Fourier space - 3×2pt"),)
+
+
 # The three frozen configurations, by name. Keys of each entry:
 #   frozen_module  = the generated configuration module under frozen/;
-#   provenance     = the example yaml it was frozen from (a human-readable
-#                    snapshot under frozen/, never loaded by a test);
+#   provenance     = the current evaluation YAML for the random-model test;
+#                    frozen/ retains a snapshot for reference
 #   likelihood     = the Cobaya component name, needed to reach that block
 #                    inside the loaded configuration dictionary;
 #   tatt_dataset   = the TATT-generated dataset of the TATT variants;
