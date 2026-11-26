@@ -45,33 +45,41 @@ what it measured.
 
 ## Running the tests <a name="run_tests"></a>
 
-We assume users are in the Conda cocoa environment from a previous
-`conda activate cocoa` command, that the shell is bash, and that the
-current folder is the cocoa main folder `cocoa/Cocoa`. Every command
-below assumes `start_cocoa.sh` has been sourced once:
+Use Bash in the main `cocoa/Cocoa/` directory with the Cocoa Conda
+environment activated.
 
-    source start_cocoa.sh
+**Step :one:** Load Cocoa.
 
-Run the full suite with
+```bash
+source start_cocoa.sh
+```
 
-    python -m pytest ./projects/roman_fourier/tests/data_vector
+**Step :two:** Set four OpenMP threads and one BLAS thread.
 
-or, without pytest,
+- Linux
 
-    python -m unittest discover -s ./projects/roman_fourier/tests -v
+      export OMP_NUM_THREADS=4 COCOA_TEST_OMP_THREADS=4 OMP_DYNAMIC=FALSE \
+        OMP_PROC_BIND=close OMP_PLACES=cores OPENBLAS_NUM_THREADS=1 \
+        OPENBLAS_DEFAULT_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
 
-The tests change no project files. Each test prints a progress line per
-model build and per evaluation, then a report with the computed $\chi^2$,
-the stored reference, the difference, and the pass limit. A full run
-performs about 135 likelihood evaluations and takes a few minutes. The test
-files set their OpenMP worker count before imports.
+- macOS (arm)
 
-The shared likelihood tests default to four OpenMP workers. For six workers,
-set `COCOA_TEST_OMP_THREADS=6` and `OMP_THREAD_LIMIT=6` before
-starting Python. The entry points copy the test setting to
-`OMP_NUM_THREADS` before importing native libraries. Keep BLAS at
-one worker. A smaller OpenMP thread limit can reduce the actual team
-below the requested count.
+      export OMP_NUM_THREADS=4 COCOA_TEST_OMP_THREADS=4 OMP_DYNAMIC=FALSE \
+        OMP_PROC_BIND=disabled OMP_PLACES=cores OPENBLAS_NUM_THREADS=1 \
+        OPENBLAS_DEFAULT_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+
+**Step :three:** Run the data-vector tests.
+
+```bash
+python -m pytest -s projects/roman_fourier/tests/data_vector
+```
+
+For unittest discovery, use this alternative.
+
+```bash
+python -m unittest discover -s projects/roman_fourier/tests/data_vector -v
+```
+
 
 ## The tests <a name="the_tests"></a>
 
@@ -85,7 +93,7 @@ The TATT variants set
     roman_BTA_1: 0.05
     roman_A2_2: -1.51541
 
-The suite follows the shared
+The tests follow the shared
 [test-file naming convention](https://github.com/CosmoLike/cocoa-cosmolike-core/blob/main/README.md#dv_naming): a file name
 means the same thing in every project. This project's
 configurations and test numbers:
@@ -128,11 +136,7 @@ not run under `ones` (the Warning below).
 > there was no upsampling and the difference reached
 > $\Delta\chi^2 = 87184$ across the prior.
 
-The point values, the design, and the decision record live with the
-lsst_y1 project (its tests/README.md carries the full discussion);
-the table below is this project's own measurement:
-
-| output table (points) | internal grid (points) | max $\Delta\chi^2$ | Runtime / first row |
+| output table (points) | internal grid (points) | max Δχ² | Runtime / first row |
 |---|---|---|---|
 | 1,100 | 1,100 (shared) | 87184 | 1.00 |
 | 1,024,900 (`accuracyboost: 1`) | 1,100 | 0.209 | 1.27 |
@@ -447,7 +451,7 @@ derivative column.
 
 Measured on 2026-11-18 (OMP 4), $\sigma$ in $\sqrt{\chi^2}$ units:
 
-| stencil noise $\sigma$ | $w_0$ | $w_a$ | `roman_B1_8` |
+| stencil noise σ | w₀ | wₐ | `roman_B1_8` |
 |---|---|---|---|
 | cap 150 (no early exit) | 3.88e-3 | 5.00e-4 | 3e-13 |
 | cap 200 (production) | 4.09e-3 | 5.03e-4 | - |
@@ -508,6 +512,10 @@ node count.
 
 ## Hybrid-emulator accuracy test
 
+**Mechanism.** Compare the candidate emulator's predictions with CAMB at
+the same saved cosmologies and nuisance values. Score the prediction
+differences using the benchmark mask and covariance.
+
 [compare_emulator_camb.py](../compare_emulator_camb.py) compares the candidate
 matter-spectrum emulator with fresh CAMB predictions at the saved 50
 broad and 25 focused cosmologies. Its fixed [benchmark](../fisher_reference/)
@@ -554,12 +562,12 @@ that must be checked on the chain used for reweighting.
 
 | Parameter | Range |
 | --- | --- |
-| Total matter density | $0.2<\Omega_m<0.5$ |
-| Primordial amplitude | $1<10^9 A_s\le 3.5$ |
-| Hubble constant | $H_0<85$ km/s/Mpc |
-| Present dark-energy equation of state in CPL | $w_0>-2$ |
-| Early-time dark-energy equation of state | $w_0+w_a<-0.4$ |
-| Physical baryon density | $\Omega_b(H_0/100)^2<0.035$ |
+| Total matter density | 0.2 < Ωm < 0.5 |
+| Primordial amplitude | 1 < 10⁹ Aₛ ≤ 3.5 |
+| Hubble constant | H₀ < 85 km/s/Mpc |
+| Present dark-energy equation of state in CPL | w₀ > −2 |
+| Early-time dark-energy equation of state | w₀ + wₐ < −0.4 |
+| Physical baryon density | Ωb (H₀ / 100)² < 0.035 |
 
 The revised tables retain cosmologies that already satisfy the cap and
 replace the excluded rows deterministically. The focused replacements
@@ -624,15 +632,36 @@ as advisory. The strict standalone command also checks the error threshold.
 python -m pytest projects/roman_fourier/tests/data_vector/test_emul2.py -k e5
 ```
 
-To distribute the numerical comparisons across two MPI ranks with four
-OpenMP threads each, use the same driver directly from activated Cocoa.
-Keep BLAS at one thread and pass `--mpi` so the ranks own different points.
+For MPI, run from the main `Cocoa/` directory with the environment activated.
 
-```bash
-OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-  VECLIB_MAXIMUM_THREADS=1 mpirun -n 2 --bind-to none python -m mpi4py \
-  projects/roman_fourier/tests/compare_emulator_camb.py --mpi --advisory
-```
+**Step :one:** Set four OpenMP threads and one BLAS thread per rank.
+
+- Linux
+
+      export OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE \
+        OMP_PROC_BIND=close OMP_PLACES=cores OPENBLAS_NUM_THREADS=1 \
+        OPENBLAS_DEFAULT_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+
+- macOS (arm)
+
+      export OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE \
+        OMP_PROC_BIND=disabled OMP_PLACES=cores OPENBLAS_NUM_THREADS=1 \
+        OPENBLAS_DEFAULT_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+
+**Step :two:** Run the comparison with two MPI ranks.
+
+- Linux
+
+      "${CONDA_PREFIX}"/bin/mpirun -n 2 --oversubscribe \
+        --mca pml ob1 --mca btl vader,tcp,self \
+        --bind-to core:overload-allowed --map-by numa:pe="${OMP_NUM_THREADS}" \
+        python -m mpi4py \
+        projects/roman_fourier/tests/compare_emulator_camb.py --mpi --advisory
+
+- macOS (arm)
+
+      mpirun -n 2 --bind-to none python -m mpi4py \
+        projects/roman_fourier/tests/compare_emulator_camb.py --mpi --advisory
 
 The shared plot uses saved 68% and 95% bounded Fisher contours with
 nuisance parameters marginalized. The reference records the matrix, priors,
@@ -645,52 +674,95 @@ network installation.
 python projects/roman_fourier/tests/compare_emulator_camb.py --plot-only /path/to/run
 ```
 
-## FoM convergence
+## FoM convergence <a name="fom-convergence"></a>
 
 This CAMB test uses the ordinary accuracy and physical prescription of each
 benchmark to build one full local Fisher matrix. The figure of merit is
-$1/\sqrt{\det C_{w_0,w_a}}$, with nuisance parameters marginalized in the
-Gaussian approximation. The sampled pair $w_0,w_0+w_a$ has the same ellipse
+$`1/\sqrt{\det C_{w_0,w_a}}`$, with nuisance parameters marginalized in the
+Gaussian approximation. The sampled pair $`w_0,w_0+w_a`$ has the same ellipse
 area. Gaussian prior curvature enters the Fisher matrix, and prior bounds
 limit the stencil positions.
 
-The five-point stencil uses a fixed 2.5% relative step, shortened near prior
-bounds. A zero-centered parameter uses its specified absolute step or one
-tenth of its proposal width. The fourth differences rank the numerical
-sensitivity of the columns. Both higher settings reevaluate the same selected
-columns and use the same full ordinary Fisher weights. The reported values
-scale the ordinary FoM by each selected-column noise estimate. Contributions
-from omitted columns, smooth derivative shifts and correlated numerical
-errors remain unknown.
+**Mechanism.** The test computes every derivative at the default
+settings. To estimate numerical noise it takes fourth differences of the
+five predictions used for each derivative. The step is 2.5% for nonzero
+parameter values, shortened at prior boundaries. For a zero-centered
+parameter it uses the specified absolute step or one tenth of its
+proposal width.
 
-| Case | Setting | CosmoLike boost / integration | CAMB boost / k_per_logint | Approx. FoM | Change from previous |
-| --- | --- | --- | --- | --- | --- |
-| Cosmic shear | Ordinary | 2.0 / 0 | 1.05 / 15 | 18.831483 | — |
-| Cosmic shear | Refined | 3.0 / 1 | 2.0 / 50 | 18.801831 | -0.15746% |
-| Cosmic shear | Confirmation | 3.0 / 2 | 3.0 / 75 | 18.80017 | -0.00883569% |
-| 3×2pt | Ordinary | 2.0 / 0 | 1.1 / 15 | 117.05101 | — |
-| 3×2pt | Refined | 3.0 / 1 | 2.0 / 50 | 116.7364 | -0.268786% |
-| 3×2pt | Confirmation | 3.0 / 2 | 3.0 / 75 | 116.71826 | -0.0155346% |
+The estimate treats the derivative errors as centered and uncorrelated.
+
+```math
+F_q \simeq F_0 + \operatorname{diag}(a_q), \qquad S_q = F_q^{-1}.
+```
+
+Here $`F_0`$ is the full default Fisher matrix, and each entry in
+$`a_q`$ is a fourth-difference estimate of the noise for one selected
+derivative at setting $`q`$, weighted by the inverse data covariance. The FoM
+uses the dark-energy block of $`S_q`$. Both refinements reevaluate the
+same selected derivatives. Their noise estimates use the same selection
+at the default and higher settings. Noise in the other derivatives and
+smooth shifts of any derivative remain unmeasured.
+
+| Setting | Default | Higher | Highest |
+| --- | ---: | ---: | ---: |
+| CosmoLike `accuracyboost` | 2 | 3 | 3 |
+| CosmoLike `integration_accuracy` | 0 | 1 | 2 |
+| CAMB `AccuracyBoost` (Cosmic shear) | 1.05 | 2 | 3 |
+| CAMB `AccuracyBoost` (3×2pt) | 1.1 | 2 | 3 |
+| CAMB `k_per_logint` | 15 | 50 | 75 |
+
+The entries are estimated FoM changes between successive settings.
+
+| Likelihood | Default → higher | Higher → highest |
+| --- | ---: | ---: |
+| Cosmic shear | −0.16% | −8.8×10⁻³% |
+| 3×2pt | −0.27% | −0.016% |
+
+The default settings meet the 1% check for every likelihood shown.
+Both successive estimated changes are below 1%.
 
 **Selected columns in both higher settings**
 
 - Cosmic shear — `roman_DZ_S2`, `roman_DZ_S3`, `roman_DZ_S5`, `roman_DZ_S6`, `roman_DZ_S4`, `roman_DZ_S7`, `roman_DZ_S8`, `w`, `w0pwa`.
 - 3×2pt — `roman_DZ_S2`, `roman_DZ_S1`, `roman_DZ_S3`, `roman_DZ_S7`, `roman_DZ_S6`, `roman_DZ_S8`, `w`, `w0pwa`.
 
-Run from activated Cocoa with two MPI ranks, four OpenMP threads per rank
-and one BLAS thread.
-
 The default is cosmic shear. Use `--probe 3x2pt` for the full selection.
 
-```bash
-OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
-  VECLIB_MAXIMUM_THREADS=1 mpirun -n 2 --bind-to none python -m mpi4py \
-  projects/roman_fourier/tests/check_fom_convergence.py --mpi
-```
+Run from the main `Cocoa/` directory with the Cocoa environment activated.
+
+**Step :one:** Set four OpenMP threads and one BLAS thread per rank.
+
+- Linux
+
+      export OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE \
+        OMP_PROC_BIND=close OMP_PLACES=cores \
+        OPENBLAS_NUM_THREADS=1 \
+          OPENBLAS_DEFAULT_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+
+- macOS (arm)
+
+      export OMP_NUM_THREADS=4 OMP_DYNAMIC=FALSE \
+        OMP_PROC_BIND=disabled OMP_PLACES=cores \
+        OPENBLAS_NUM_THREADS=1 \
+          OPENBLAS_DEFAULT_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+
+**Step :two:** Run the check with two MPI ranks.
+
+- Linux
+
+      "${CONDA_PREFIX}"/bin/mpirun -n 2 --oversubscribe \
+        --mca pml ob1 --mca btl vader,tcp,self \
+        --bind-to core:overload-allowed --map-by numa:pe="${OMP_NUM_THREADS}" \
+        python -m mpi4py projects/roman_fourier/tests/check_fom_convergence.py --mpi
+
+- macOS (arm)
+
+      mpirun -n 2 --bind-to none python -m mpi4py \
+        projects/roman_fourier/tests/check_fom_convergence.py --mpi
 
 The run directory contains `fisher/fom_accuracy.tsv`, the effective
-settings for each tier, and the measured and omitted columns. The standalone
-screen applies its 1% tolerance to the estimated refined-to-confirmation change.
+settings, and the measured and omitted columns.
 
 ## Appendix <a name="appendix"></a>
 
@@ -704,7 +776,7 @@ This project's `frozen/` holds:
 |---|---|
 | `frozen_config_*.py` | one module per configuration (cosmic shear, 3x2pt, and 2x2pt): the complete cobaya configuration as a yaml string, plus the exact evaluation point |
 | `data/` | the tests' own copy of the data vectors, covariance, n(z), and masks |
-| `reference_chi2.json` | the six reference $`\chi^2`$ values: cosmic shear, 3x2pt, and 2x2pt, each with NLA and TATT |
+| `reference_chi2.json` | the six reference χ² values: cosmic shear, 3x2pt, and 2x2pt, each with NLA and TATT |
 | `EXAMPLE_EVALUATE{1,2}.yaml` | snapshots kept only so a human can diff how the live examples drifted since the freeze |
 
 All TATT variants evaluate against `frozen/data/tatt_roman_fourier.dataset`,
