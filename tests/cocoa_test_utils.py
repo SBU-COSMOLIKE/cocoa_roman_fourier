@@ -114,6 +114,7 @@ EXAMPLES = {
     "example2": {
         "frozen_module": "frozen_config_example2.py",
         "provenance": "EXAMPLE_EVALUATE2.yaml",
+        "nmodels_fisher": "fisher_reference/3x2pt/contours.json",
         "likelihood": "roman_fourier.combo_3x2pt",
         "tatt_dataset": "tatt_roman_fourier.dataset",
     },
